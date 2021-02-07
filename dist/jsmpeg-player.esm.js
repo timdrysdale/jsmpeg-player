@@ -4555,7 +4555,6 @@ var Player = /*#__PURE__*/function () {
       hooks = {};
     }
 
-    this.frameEvent = new Event('frame');
     this.options = options;
     this.hooks = hooks;
 
@@ -4746,7 +4745,6 @@ var Player = /*#__PURE__*/function () {
   };
 
   _proto.update = function update() {
-    document.dispatchEvent(this.frameEvent);
     this.animationId = requestAnimationFrame(this.update.bind(this));
 
     if (!this.source.established) {

@@ -1175,7 +1175,7 @@
       this.timestampIndex = 0;
       this.startTime = 0;
       this.decodedTime = 0;
-      Object.defineProperty(this, "currentTime", {
+      Object.defineProperty(this, 'currentTime', {
         get: this.getCurrentTime
       });
     }
@@ -1214,7 +1214,7 @@
       }
 
       this.bytesWritten += this.bufferWrite(buffers);
-      var videoWrite = new CustomEvent("videoWrite", {
+      var videoWrite = new CustomEvent('videoWrite', {
         detail: {
           bytes: this.bytesWritten
         }
@@ -4561,7 +4561,6 @@
         hooks = {};
       }
 
-      this.frameEvent = new Event('frame');
       this.options = options;
       this.hooks = hooks;
 
@@ -4752,7 +4751,6 @@
     };
 
     _proto.update = function update() {
-      document.dispatchEvent(this.frameEvent);
       this.animationId = requestAnimationFrame(this.update.bind(this));
 
       if (!this.source.established) {
