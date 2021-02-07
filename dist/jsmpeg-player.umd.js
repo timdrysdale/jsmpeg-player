@@ -1175,9 +1175,10 @@
       this.timestampIndex = 0;
       this.startTime = 0;
       this.decodedTime = 0;
-      Object.defineProperty(this, 'currentTime', {
+      Object.defineProperty(this, "currentTime", {
         get: this.getCurrentTime
       });
+      this.writeEvent = new Event("videoWrite");
     }
 
     var _proto = BaseDecoder.prototype;
@@ -1214,6 +1215,7 @@
       }
 
       this.bytesWritten += this.bufferWrite(buffers);
+      document.dispatchEvent(this.writeEvent, this.bytesWritten);
       this.canPlay = true;
     };
 

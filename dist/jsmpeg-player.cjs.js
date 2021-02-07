@@ -1174,6 +1174,7 @@ var BaseDecoder = /*#__PURE__*/function () {
     Object.defineProperty(this, 'currentTime', {
       get: this.getCurrentTime
     });
+    this.writeEvent = new Event('videoWrite');
   }
 
   var _proto = BaseDecoder.prototype;
@@ -1210,6 +1211,7 @@ var BaseDecoder = /*#__PURE__*/function () {
     }
 
     this.bytesWritten += this.bufferWrite(buffers);
+    document.dispatchEvent(this.writeEvent, this.bytesWritten);
     this.canPlay = true;
   };
 
