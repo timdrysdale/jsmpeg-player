@@ -13,8 +13,6 @@ export default class BaseDecoder {
     this.decodedTime = 0;
 
     Object.defineProperty(this, 'currentTime', { get: this.getCurrentTime });
-
-    this.writeEvent = new Event('videoWrite');
   }
 
   destroy() {}
@@ -46,7 +44,10 @@ export default class BaseDecoder {
 
     this.bytesWritten += this.bufferWrite(buffers);
 
-    document.dispatchEvent(this.writeEvent, this.bytesWritten);
+    const videoWrite = new CustomEvent('videoWrite', {
+      detail: { bytes: this.bytesWritten }
+    });
+    document.dispatchEvent(videoWrite);
 
     this.canPlay = true;
   }
