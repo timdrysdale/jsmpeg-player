@@ -1,18 +1,18 @@
-import { Now, Base64ToArrayBuffer } from '../utils';
+import { Now, Base64ToArrayBuffer } from "../utils";
 
-import AjaxSource from './ajax';
-import AjaxProgressiveSource from './ajax-progressive';
-import WSSource from './websocket';
-import TS from './ts';
-import MPEG1 from './mpeg1';
-import MPEG1WASM from './mpeg1-wasm';
-import MP2 from './mp2';
-import MP2WASM from './mp2-wasm';
-import WebGLRenderer from './webgl';
-import CanvasRenderer from './canvas2d';
-import WebAudioOut from './webaudio';
-import WASMModule from './wasm-module';
-import WASM_BINARY from './wasm/WASM_BINARY';
+import AjaxSource from "./ajax";
+import AjaxProgressiveSource from "./ajax-progressive";
+import WSSource from "./websocket";
+import TS from "./ts";
+import MPEG1 from "./mpeg1";
+import MPEG1WASM from "./mpeg1-wasm";
+import MP2 from "./mp2";
+import MP2WASM from "./mp2-wasm";
+import WebGLRenderer from "./webgl";
+import CanvasRenderer from "./canvas2d";
+import WebAudioOut from "./webaudio";
+import WASMModule from "./wasm-module";
+import WASM_BINARY from "./wasm/WASM_BINARY";
 
 export default class Player {
   /**
@@ -22,6 +22,8 @@ export default class Player {
    * @constructor
    */
   constructor(url, options = {}, hooks = {}) {
+    this.frameEvent = new Event("frame");
+
     this.options = options;
 
     this.hooks = hooks;
@@ -59,7 +61,9 @@ export default class Player {
     }
 
     if (options.video !== false) {
-      this.video = options.wasmModule ? new MPEG1WASM(options) : new MPEG1(options);
+      this.video = options.wasmModule
+        ? new MPEG1WASM(options)
+        : new MPEG1(options);
 
       this.renderer =
         !options.disableGl && WebGLRenderer.IsSupported()
@@ -77,19 +81,19 @@ export default class Player {
       this.audio.connect(this.audioOut);
     }
 
-    Object.defineProperty(this, 'currentTime', {
+    Object.defineProperty(this, "currentTime", {
       get: this.getCurrentTime,
-      set: this.setCurrentTime
+      set: this.setCurrentTime,
     });
-    Object.defineProperty(this, 'volume', {
+    Object.defineProperty(this, "volume", {
       get: this.getVolume,
-      set: this.setVolume
+      set: this.setVolume,
     });
 
     this.paused = true;
     this.unpauseOnShow = false;
     if (options.pauseWhenHidden !== false) {
-      document.addEventListener('visibilitychange', this.showHide.bind(this));
+      document.addEventListener("visibilitychange", this.showHide.bind(this));
     }
 
     // If we have WebAssembly support, wait until the module is compiled before
@@ -102,7 +106,10 @@ export default class Player {
         const wasm = Base64ToArrayBuffer(WASM_BINARY);
         this.wasmModule.loadFromBuffer(wasm, this.startLoading.bind(this));
       } else {
-        this.wasmModule.loadFromFile('jsmpeg.wasm', this.startLoading.bind(this));
+        this.wasmModule.loadFromFile(
+          "jsmpeg.wasm",
+          this.startLoading.bind(this)
+        );
       }
     } else {
       this.startLoading();
@@ -117,7 +124,7 @@ export default class Player {
   }
 
   showHide() {
-    if (document.visibilityState === 'hidden') {
+    if (document.visibilityState === "hidden") {
       this.unpauseOnShow = this.wantsToPlay;
       this.pause();
     } else if (this.unpauseOnShow) {
@@ -195,7 +202,9 @@ export default class Player {
 
   seek(time) {
     const startOffset =
-      this.audio && this.audio.canPlay ? this.audio.startTime : this.video.startTime;
+      this.audio && this.audio.canPlay
+        ? this.audio.startTime
+        : this.video.startTime;
 
     if (this.video) {
       this.video.seek(time + startOffset);
@@ -218,6 +227,8 @@ export default class Player {
   }
 
   update() {
+    document.dispatchEvent(this.frameEvent);
+
     this.animationId = requestAnimationFrame(this.update.bind(this));
 
     if (!this.source.established) {
@@ -286,7 +297,10 @@ export default class Player {
 
     if (this.audio && this.audio.canPlay) {
       // Do we have to decode and enqueue some more audio data?
-      while (!notEnoughData && this.audio.decodedTime - this.audio.currentTime < 0.25) {
+      while (
+        !notEnoughData &&
+        this.audio.decodedTime - this.audio.currentTime < 0.25
+      ) {
         notEnoughData = !this.audio.decode();
       }
 
