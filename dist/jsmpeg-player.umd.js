@@ -694,8 +694,8 @@
       };
       this.destination = null;
       this.reconnectInterval = // eslint-disable-next-line no-undefined
-      options.reconnectInterval !== undefined ? options.reconnectInterval : 5;
-      this.shouldAttemptReconnect = !!this.reconnectInterval;
+      options.reconnectInterval !== undefined ? options.reconnectInterval : -1;
+      this.shouldAttemptReconnect = this.reconnectInterval > 0;
       this.completed = false;
       this.established = false;
       this.progress = 0;
@@ -725,7 +725,7 @@
       this.progress = 0;
       this.established = false;
       this.socket = new WebSocket(this.url, this.options.protocols || null);
-      this.socket.binaryType = 'arraybuffer';
+      this.socket.binaryType = "arraybuffer";
       this.socket.onmessage = this.onMessage.bind(this);
       this.socket.onopen = this.onOpen.bind(this);
       this.socket.onerror = this.onClose.bind(this);

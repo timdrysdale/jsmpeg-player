@@ -690,8 +690,8 @@ var WSSource = /*#__PURE__*/function () {
     };
     this.destination = null;
     this.reconnectInterval = // eslint-disable-next-line no-undefined
-    options.reconnectInterval !== undefined ? options.reconnectInterval : 5;
-    this.shouldAttemptReconnect = !!this.reconnectInterval;
+    options.reconnectInterval !== undefined ? options.reconnectInterval : -1;
+    this.shouldAttemptReconnect = this.reconnectInterval > 0;
     this.completed = false;
     this.established = false;
     this.progress = 0;
