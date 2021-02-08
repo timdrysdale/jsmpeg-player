@@ -10,8 +10,8 @@ export default class WSSource {
 
     this.reconnectInterval =
       // eslint-disable-next-line no-undefined
-      options.reconnectInterval !== undefined ? options.reconnectInterval : -1;
-    this.shouldAttemptReconnect = this.reconnectInterval > 0;
+      options.reconnectInterval !== undefined ? options.reconnectInterval : 300;
+    this.shouldAttemptReconnect = !!this.reconnectInterval;
 
     this.completed = false;
     this.established = false;

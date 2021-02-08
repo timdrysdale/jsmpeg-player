@@ -694,8 +694,8 @@
       };
       this.destination = null;
       this.reconnectInterval = // eslint-disable-next-line no-undefined
-      options.reconnectInterval !== undefined ? options.reconnectInterval : -1;
-      this.shouldAttemptReconnect = this.reconnectInterval > 0;
+      options.reconnectInterval !== undefined ? options.reconnectInterval : 300;
+      this.shouldAttemptReconnect = !!this.reconnectInterval;
       this.completed = false;
       this.established = false;
       this.progress = 0;
@@ -725,7 +725,7 @@
       this.progress = 0;
       this.established = false;
       this.socket = new WebSocket(this.url, this.options.protocols || null);
-      this.socket.binaryType = 'arraybuffer';
+      this.socket.binaryType = "arraybuffer";
       this.socket.onmessage = this.onMessage.bind(this);
       this.socket.onopen = this.onOpen.bind(this);
       this.socket.onerror = this.onClose.bind(this);
@@ -1175,7 +1175,7 @@
       this.timestampIndex = 0;
       this.startTime = 0;
       this.decodedTime = 0;
-      Object.defineProperty(this, "currentTime", {
+      Object.defineProperty(this, 'currentTime', {
         get: this.getCurrentTime
       });
     }
@@ -1214,7 +1214,7 @@
       }
 
       this.bytesWritten += this.bufferWrite(buffers);
-      var videoWrite = new CustomEvent("jsmpeg:write", {
+      var videoWrite = new CustomEvent('jsmpeg:write', {
         detail: {
           bytes: this.bytesWritten
         }
