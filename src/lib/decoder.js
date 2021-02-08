@@ -44,7 +44,7 @@ export default class BaseDecoder {
 
     this.bytesWritten += this.bufferWrite(buffers);
 
-    const videoWrite = new CustomEvent('videoWrite', {
+    const videoWrite = new CustomEvent('jsmpeg:write', {
       detail: { bytes: this.bytesWritten }
     });
     document.dispatchEvent(videoWrite);

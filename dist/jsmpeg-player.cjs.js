@@ -1210,7 +1210,7 @@ var BaseDecoder = /*#__PURE__*/function () {
     }
 
     this.bytesWritten += this.bufferWrite(buffers);
-    var videoWrite = new CustomEvent('videoWrite', {
+    var videoWrite = new CustomEvent('jsmpeg:write', {
       detail: {
         bytes: this.bytesWritten
       }
